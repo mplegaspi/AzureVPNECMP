@@ -86,6 +86,7 @@ From the result, we saw that 8 flows distribute into 2 IPSec tunnels. Each recei
 ## Testing Scenarios 2 : Single sender with multiple UDP flows.
 
 For udp testing, on sender side, run ` iperf -c 10.3.0.4 -b 1m -P 8 -u -l 1400`. Sender send 8 concurrent flows, each flow with 1Mbps bandwidth. Please note that packet length is 1400 bytes, this will avoid IP fragmentation at IPSec VPN gateway. <br>
+From the result, we saw that 8 flows are all in one IPSec tunnel. One receiver has 8 flows, the other has 0 flows.<br>
 
 ![](https://github.com/yinghli/AzureVPNECMP/blob/master/UDP.jpg)
 
