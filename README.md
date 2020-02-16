@@ -96,4 +96,4 @@ To check UDP flows load sharing in step 2, we simulate multiple sender and recei
 Sender = ('10.2.0.5' '10.2.2.4' '10.2.0.6' '10.2.0.8' '10.2.2.5' '10.2.2.6' '10.2.2.7' '10.2.0.9') <br>
 Receiver = ('10.3.0.4' '10.3.0.5') <br>
 Protocol = ('TCP' 'UDP') <br>
-We can simulate total 8*2*2=32 flows <br>
+We can simulate total 8 * 2 * 2 = 32 flows <br>
