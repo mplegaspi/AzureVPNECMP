@@ -109,4 +109,7 @@ do
         iperf -c 10.3.0.5 -p 5001 -b 1m -t 60 -B ${ARRAY[$i-1]}  -u -l 1400 &
 done
 ```
+From the result, we saw that total 32 TCP/UDP flows, 15 flows in IPSec tunnel 1 and 17 flows in IPSec tunnel 2. This result show that when multiple flows with different source and destination, the traffic load will be distributed on two tunnels. 
+
+![](https://github.com/yinghli/AzureVPNECMP/blob/master/Both.jpg)
 
