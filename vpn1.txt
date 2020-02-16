@@ -1,0 +1,62 @@
+New-AzResourceGroup -Name TestRG2 -Location eastasia
+$virtualNetwork = New-AzVirtualNetwork -ResourceGroupName TestRG2 -Location eastasia -Name VNet2 -AddressPrefix 10.2.0.0/16
+$subnetConfig = Add-AzVirtualNetworkSubnetConfig -Name Frontend -AddressPrefix 10.2.0.0/24 -VirtualNetwork $virtualNetwork
+$virtualNetwork | Set-AzVirtualNetwork
+$vnet = Get-AzVirtualNetwork -ResourceGroupName TestRG2 -Name VNet2
+Add-AzVirtualNetworkSubnetConfig -Name 'GatewaySubnet' -AddressPrefix 10.2.255.0/24 -VirtualNetwork $vnet
+$vnet | Set-AzVirtualNetwork
+$gwpip= New-AzPublicIpAddress -Name VNet2GWIP -ResourceGroupName TestRG2 -Location eastasia -AllocationMethod Dynamic
+$vnet = Get-AzVirtualNetwork -Name VNet2 -ResourceGroupName TestRG2
+$subnet = Get-AzVirtualNetworkSubnetConfig -Name 'GatewaySubnet' -VirtualNetwork $vnet
+$gwipconfig = New-AzVirtualNetworkGatewayIpConfig -Name gwipconfig2 -SubnetId $subnet.Id -PublicIpAddressId $gwpip.Id
+New-AzVirtualNetworkGateway -Name VNet2GW -ResourceGroupName TestRG2 -Location eastasia -IpConfigurations $gwipconfig -GatewayType Vpn -VpnType RouteBased -GatewaySku VpnGw2 -VpnGatewayGeneration Generation2 -EnableBgp $true -Asn 65002
+
+
+
+New-AzResourceGroup -Name TestRG3 -Location eastasia
+$virtualNetwork = New-AzVirtualNetwork -ResourceGroupName TestRG3 -Location eastasia -Name VNet3 -AddressPrefix 10.3.0.0/16
+$subnetConfig = Add-AzVirtualNetworkSubnetConfig -Name Frontend -AddressPrefix 10.3.0.0/24 -VirtualNetwork $virtualNetwork
+$virtualNetwork | Set-AzVirtualNetwork
+$vnet = Get-AzVirtualNetwork -ResourceGroupName TestRG3 -Name VNet3
+Add-AzVirtualNetworkSubnetConfig -Name 'GatewaySubnet' -AddressPrefix 10.3.255.0/24 -VirtualNetwork $vnet
+$vnet | Set-AzVirtualNetwork
+$gwpip= New-AzPublicIpAddress -Name VNet3GWIP -ResourceGroupName TestRG3 -Location eastasia -AllocationMethod Dynamic
+$vnet = Get-AzVirtualNetwork -Name VNet3 -ResourceGroupName TestRG3
+$subnet = Get-AzVirtualNetworkSubnetConfig -Name 'GatewaySubnet' -VirtualNetwork $vnet
+$gwipconfig = New-AzVirtualNetworkGatewayIpConfig -Name gwipconfig3 -SubnetId $subnet.Id -PublicIpAddressId $gwpip.Id
+New-AzVirtualNetworkGateway -Name VNet3GW -ResourceGroupName TestRG3 -Location eastasia -IpConfigurations $gwipconfig -GatewayType Vpn -VpnType RouteBased -GatewaySku VpnGw2 -VpnGatewayGeneration Generation2 -EnableBgp $true -Asn 65003
+
+
+
+New-AzResourceGroup -Name TestRG33 -Location eastasia
+$virtualNetwork = New-AzVirtualNetwork -ResourceGroupName TestRG33 -Location eastasia -Name VNet33 -AddressPrefix 10.3.0.0/16
+$subnetConfig = Add-AzVirtualNetworkSubnetConfig -Name Frontend -AddressPrefix 10.3.0.0/24 -VirtualNetwork $virtualNetwork
+$virtualNetwork | Set-AzVirtualNetwork
+$vnet = Get-AzVirtualNetwork -ResourceGroupName TestRG33 -Name VNet33
+Add-AzVirtualNetworkSubnetConfig -Name 'GatewaySubnet' -AddressPrefix 10.3.254.0/24 -VirtualNetwork $vnet
+$vnet | Set-AzVirtualNetwork
+$gwpip= New-AzPublicIpAddress -Name VNet33GWIP -ResourceGroupName TestRG33 -Location eastasia -AllocationMethod Dynamic
+$vnet = Get-AzVirtualNetwork -Name VNet33 -ResourceGroupName TestRG33
+$subnet = Get-AzVirtualNetworkSubnetConfig -Name 'GatewaySubnet' -VirtualNetwork $vnet
+$gwipconfig = New-AzVirtualNetworkGatewayIpConfig -Name gwipconfig33 -SubnetId $subnet.Id -PublicIpAddressId $gwpip.Id
+New-AzVirtualNetworkGateway -Name VNet33GW -ResourceGroupName TestRG33 -Location eastasia -IpConfigurations $gwipconfig -GatewayType Vpn -VpnType RouteBased -GatewaySku VpnGw2 -VpnGatewayGeneration Generation2 -EnableBgp $true -Asn 65003
+
+New-AzLocalNetworkGateway -Name lng2 -ResourceGroupName TestRG2 -Location eastasia -GatewayIpAddress '40.83.97.14' -AddressPrefix '10.2.255.254/32' -Asn 65002 -BgpPeeringAddress '10.2.255.254'
+New-AzLocalNetworkGateway -Name lng3 -ResourceGroupName TestRG2 -Location eastasia -GatewayIpAddress '13.70.19.201' -AddressPrefix '10.3.255.254/32' -Asn 65003 -BgpPeeringAddress '10.3.255.254'
+New-AzLocalNetworkGateway -Name lng33 -ResourceGroupName TestRG2 -Location eastasia -GatewayIpAddress '13.75.118.3' -AddressPrefix '10.3.254.254/32' -Asn 65003 -BgpPeeringAddress '10.3.254.254'
+
+$lng2 = Get-AzLocalNetworkGateway  -Name lng2 -ResourceGroupName TestRG2
+$lng3 = Get-AzLocalNetworkGateway  -Name lng3 -ResourceGroupName TestRG2
+$lng33 = Get-AzLocalNetworkGateway  -Name lng33 -ResourceGroupName TestRG2
+
+$vpngw2 = Get-AzVirtualNetworkGateway -Name VNet2GW -ResourceGroupName TestRG2
+$vpngw3 = Get-AzVirtualNetworkGateway -Name VNet3GW -ResourceGroupName TestRG3
+$vpngw33 = Get-AzVirtualNetworkGateway -Name VNet33GW -ResourceGroupName TestRG33
+
+New-AzVirtualNetworkGatewayConnection -Name 2to3 -ResourceGroupName TestRG2 -VirtualNetworkGateway1 $vpngw2 -LocalNetworkGateway2 $lng3 -ConnectionType IPsec -SharedKey 'cisco' -Location eastasia -EnableBgp $true
+New-AzVirtualNetworkGatewayConnection -Name 3to2 -ResourceGroupName TestRG3 -VirtualNetworkGateway1 $vpngw3 -LocalNetworkGateway2 $lng2 -ConnectionType IPsec -SharedKey 'cisco' -Location eastasia -EnableBgp $true
+New-AzVirtualNetworkGatewayConnection -Name 2to33 -ResourceGroupName TestRG2 -VirtualNetworkGateway1 $vpngw2 -LocalNetworkGateway2 $lng33 -ConnectionType IPsec -SharedKey 'cisco' -Location eastasia -EnableBgp $true
+New-AzVirtualNetworkGatewayConnection -Name 33to2 -ResourceGroupName TestRG33 -VirtualNetworkGateway1 $vpngw33 -LocalNetworkGateway2 $lng2 -ConnectionType IPsec -SharedKey 'cisco' -Location eastasia -EnableBgp $true
+
+
+
