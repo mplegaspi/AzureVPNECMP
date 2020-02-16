@@ -18,8 +18,8 @@ Local Network   |10.2.0.0/16     |10.3.0.0/16   |10.3.0.0/16
 
 ```
 Tips:
-1.	VNET3 and VNET33 should have same IP range. VM setup should have same IP address. <br>
-2.	Gateway subnet should be different. VPN gateway BGP ASN should be same. This simulate customer on premise environments. <br>
+1.	VNET3 and VNET33 should have same IP range. VM setup should have same IP address.
+2.	Gateway subnet should be different. VPN gateway BGP ASN should be same. 
 ```
 
 
