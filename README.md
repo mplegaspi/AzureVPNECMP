@@ -97,3 +97,16 @@ Sender = ('10.2.0.5' '10.2.2.4' '10.2.0.6' '10.2.0.8' '10.2.2.5' '10.2.2.6' '10.
 Receiver = ('10.3.0.4' '10.3.0.5') <br>
 Protocol = ('TCP' 'UDP') <br>
 We can simulate total 8 * 2 * 2 = 32 flows <br>
+We write a simple script to simulate those 32 flows.
+```
+#!/binbash
+ARRAY=('10.2.0.5' '10.2.2.4' '10.2.0.6' '10.2.0.8' '10.2.2.5' '10.2.2.6' '10.2.2.7' '10.2.0.9')
+for i in {1..8}
+do
+        iperf -c 10.3.0.4 -p 5001 -b 1m -t 60 -B ${ARRAY[$i-1]}  &
+        iperf -c 10.3.0.4 -p 5001 -b 1m -t 60 -B ${ARRAY[$i-1]}  -u -l 1400 &
+        iperf -c 10.3.0.5 -p 5001 -b 1m -t 60 -B ${ARRAY[$i-1]}  &
+        iperf -c 10.3.0.5 -p 5001 -b 1m -t 60 -B ${ARRAY[$i-1]}  -u -l 1400 &
+done
+```
+
