@@ -18,8 +18,8 @@ Local Network   |10.2.0.0/16     |10.3.0.0/16   |10.3.0.0/16
 
 ```
 Tips:
-1.	VNET3 and VNET33 should have same IP range. VM setup should have same IP address.
-2.	Gateway subnet should be different. VPN gateway BGP ASN should be same. 
+ 1. VNET3 and VNET33 should have same IP range. VM setup should have same IP address.
+ 2. Gateway subnet should be different. VPN gateway BGP ASN should be same. 
 ```
 
 ## Setup Verification 
@@ -71,11 +71,13 @@ Weight       : 32768
 We setup one sender VM2(10.2.0.4/24) at VNET2, one receiver VM3(10.3.0.4/24) at VNET3 and one receiver VM33(10.3.0.4/24) at VNET33. Those two receivers have same IP address and will check traffic distribution in our next testing. If check VM2 effective route table, you will see “10.3.0.0/16” have two next hops. Both are pointed to VPN gateway public IP address. <br>
 ![](https://github.com/yinghli/AzureVPNECMP/blob/master/RT.jpg)
 
-PING from VM2 to 10.3.0.4 is OK. Either VM3 or VM33 can reply this PING.<br>
 
-But PING from VM3 or VM33 to VM2 may be failed. This is by designed in our topology, cause return traffic may be routed via different way. <br>
-
-We use `iperf` for this testing. Please note `iperf3` use two TCP connection in the testing. may have problem in this topology.<br>
+```
+Tips:
+ 1. We use iperf for this testing. iperf3 may have problem in this topology.
+ 2. PING from VM2 to 10.3.0.4 is OK. Either VM3 or VM33 can reply this PING
+ 3. But PING from VM3 or VM33 to VM2 may be failed, return traffic may be routed via different way.
+```
 
 ## Testing Scenarios 1 : Single sender with multiple TCP flows.
 
@@ -83,12 +85,22 @@ On both receiver side, run `iperf -s -D` and `iperf -s -u -D`. iperf server will
 On sender side, run `iperf -c 10.3.0.4 -b 1m -P 8` to send 8 concurrent flows, each flow sends with 1Mbps bandwidth. <br>
 From the result, we saw that 8 flows distribute into 2 IPSec tunnels. Each receiver has 4 flows. <br>
 
+```
+Tips:
+ 1. Please use concurrent flow for TCP testing. If send flow one by one, they may go to same receiver.
+```
+
 ![](https://github.com/yinghli/AzureVPNECMP/blob/master/TCP.jpg)
 
 ## Testing Scenarios 2 : Single sender with multiple UDP flows.
 
-For udp testing, on sender side, run ` iperf -c 10.3.0.4 -b 1m -P 8 -u -l 1400`. Sender send 8 concurrent flows, each flow with 1Mbps bandwidth. Please note that packet length is 1400 bytes, this will avoid IP fragmentation at IPSec VPN gateway. <br>
+For udp testing, on sender side, run ` iperf -c 10.3.0.4 -b 1m -P 8 -u -l 1400`. Sender send 8 concurrent flows, each flow with 1Mbps bandwidth. <br>
 From the result, we saw that 8 flows are all in one IPSec tunnel. One receiver has 8 flows, the other has 0 flows.<br>
+
+```
+Tips:
+ 1. Please define packet length less than 1400 bytes, this will avoid IP fragmentation at IPSec VPN gateway.
+```
 
 ![](https://github.com/yinghli/AzureVPNECMP/blob/master/UDP.jpg)
 
