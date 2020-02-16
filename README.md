@@ -23,7 +23,7 @@ Tips:
 ```
 
 ## Setup Verification 
-After IPsec tunnle is up, you can check with PowerShell that VPN gateway BGP status. <br>
+After IPsec tunnle is up, you can check VPN gateway BGP status via PowerShell. <br>
 ```
 Get-AzVirtualNetworkGatewayBGPPeerStatus -VirtualNetworkGatewayName vnet2gw -ResourceGroupName testrg2
 
@@ -46,7 +46,7 @@ MessagesSent      : 2341
 MessagesReceived  : 220
 ```
 
-After BGP is up, you can check routing information. 10.3.0.0/16 is learned from two BGP peer that represent customer on prem VPN devices.
+After BGP is up, you can check routing information via PowerShell. IP prefix 10.3.0.0/16 is learned from two BGP peer that represent customer on prem VPN devices.
 ```
 Get-AzVirtualNetworkGatewayLearnedRoute -VirtualNetworkGatewayName vnet2gw -ResourceGroupName testrg2
 ...
