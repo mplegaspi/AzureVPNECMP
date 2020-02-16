@@ -7,7 +7,7 @@ This document recorded my testing steps when I simulate this topology at Global 
 
 ![](https://github.com/yinghli/AzureVPNECMP/blob/master/ECMP.jpg)
 
-We use this topology to simulate high available customer scenarios. VNET2 is customer on Azure resource. It includes one VPN gateway and IP prefix 10.2.0.0/16. VNET3 and VNET33 simulate customer two on premise VPN devices but share with same customer IP prefix 10.3.0.0/16.<br>
+We use this topology to simulate high available customer scenarios. VNET2 is customer on Azure resource. It includes one VPN gateway and IP prefix 10.2.0.0/16. VNET3 and VNET33 simulate customer two on premise VPN devices but share with same customer IP prefix 10.3.0.0/16. Detail setup PowerShell can be refer [here](https://github.com/yinghli/AzureVPNECMP/blob/master/vpn1.txt).<br>
 
 Parameters      | Azure          |OnPrem1       |OnPrem2    
 ----------------| -------------  |-----------   |---------     
