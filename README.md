@@ -75,6 +75,8 @@ PING from VM2 to 10.3.0.4 is OK. Either VM3 or VM33 can reply this PING.<br>
 
 But PING from VM3 or VM33 to VM2 may be failed. This is by designed in our topology, cause return traffic may be routed via different way. <br>
 
+We use `iperf` for this testing. Please note `iperf3` use two TCP connection in the testing. may have problem in this topology.<br>
+
 ## Testing Scenarios 1 : Single sender with multiple TCP flows.
 
 On both receiver side, run `iperf -s -D` and `iperf -s -u -D`. iperf server will listen on tcp port 5001 and udp port 5001.<br>
