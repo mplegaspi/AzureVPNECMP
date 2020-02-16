@@ -77,13 +77,17 @@ But PING from VM3 or VM33 to VM2 may be failed. This is by designed in our topol
 
 ## Testing Scenarios 1 : Single sender with multiple TCP flows.
 
-On both receiver side, we run `iperf -s -D` and `iperf -s -u -D`. iperf server will listen on tcp port 5001 and udp port 5001.<br>
-On sender side, we run `iperf -c 10.3.0.4 -b 1m -P 8` to send 8 concurrent flows, each flow sends with 1Mbps bandwidth. <br>
+On both receiver side, run `iperf -s -D` and `iperf -s -u -D`. iperf server will listen on tcp port 5001 and udp port 5001.<br>
+On sender side, run `iperf -c 10.3.0.4 -b 1m -P 8` to send 8 concurrent flows, each flow sends with 1Mbps bandwidth. <br>
 From the result, we saw that 8 flows distribute into 2 IPSec tunnels. Each receiver has 4 flows. <br>
 
 ![](https://github.com/yinghli/AzureVPNECMP/blob/master/TCP.jpg)
 
 ## Testing Scenarios 2 : Single sender with multiple UDP flows.
+
+For udp testing, on sender side, run ` iperf -c 10.3.0.4 -b 1m -P 8 -u -l 1400`. Sender send 8 concurrent flows, each flow with 1Mbps bandwidth. Please note that packet length is 1400 bytes, this will avoid IP fragmentation at IPSec VPN gateway. <br>
+
+![](https://github.com/yinghli/AzureVPNECMP/blob/master/UDP.jpg)
 
 ## Testing Scenarios 3: Multiple sender with multiple TCP/UDP flows.
 
