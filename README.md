@@ -93,10 +93,27 @@ From the result, we saw that 8 flows are all in one IPSec tunnel. One receiver h
 ## Testing Scenarios 3: Multiple sender with multiple TCP/UDP flows.
 
 To check UDP flows load sharing in step 2, we simulate multiple sender and receiver with mixed TCP and UDP flows. On sender and receiver side, we add multiple secondary IP address. One sender side, we also add second NIC in the system. <br>
+
 Sender = ('10.2.0.5' '10.2.2.4' '10.2.0.6' '10.2.0.8' '10.2.2.5' '10.2.2.6' '10.2.2.7' '10.2.0.9') <br>
 Receiver = ('10.3.0.4' '10.3.0.5') <br>
 Protocol = ('TCP' 'UDP') <br>
 We can simulate total 8 * 2 * 2 = 32 flows <br>
+
+On the sender side, when add second NIC and secondary IP address, need to configure route table to sent traffic correctly.<br>
+```
+ip addr add 10.2.0.6/24 dev eth0
+ip addr add 10.2.2.5/24 dev eth0
+ip route add 10.3.0.0/16 via 10.2.0.1 table 100
+ip route add 10.3.0.0/16 via 10.2.2.1 table 102
+ip rule add from 10.2.0.0/24 lookup 100
+ip rule add from 10.2.2.0/24 lookup 102
+```
+
+After setup, we run `ip addr` on sender site and have ip address configured.
+![](https://github.com/yinghli/AzureVPNECMP/blob/master/ipaddr.jpg)
+
+A simple test with `ping 10.3.0.4 -I 10.2.2.5` can verify above setup. 
+
 We write a simple script to simulate those 32 flows.
 ```
 #!/binbash
