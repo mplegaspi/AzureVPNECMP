@@ -69,6 +69,7 @@ Weight       : 32768
 ```
 
 We setup one sender VM2(10.2.0.4/24) at VNET2, one receiver VM3(10.3.0.4/24) at VNET3 and one receiver VM33(10.3.0.4/24) at VNET33. Those two receivers have same IP address and will check traffic distribution in our next testing. If check VM2 effective route table, you will see “10.3.0.0/16” have two next hops. Both are pointed to VPN gateway public IP address. <br>
+![](https://github.com/yinghli/AzureVPNECMP/blob/master/RT.jpg)
 
 PING from VM2 to 10.3.0.4 is OK. Either VM3 or VM33 can reply this PING.<br>
 
