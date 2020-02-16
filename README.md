@@ -22,4 +22,27 @@ Tips:
 2.	Gateway subnet should be different. VPN gateway BGP ASN should be same. 
 ```
 
+## Setup Verification 
+After BGP is up, you can check with PowerShell that VPN gateway BGP status. <br>
+```
+Get-AzVirtualNetworkGatewayBGPPeerStatus -VirtualNetworkGatewayName vnet2gw -ResourceGroupName testrg2
+
+LocalAddress      : 10.2.255.254
+Neighbor          : 10.3.254.254
+Asn               : 65003
+State             : Connected
+ConnectedDuration : 02:52:19.1202268
+RoutesReceived    : 1
+MessagesSent      : 199
+MessagesReceived  : 202
+
+LocalAddress      : 10.2.255.254
+Neighbor          : 10.3.255.254
+Asn               : 65003
+State             : Connected
+ConnectedDuration : 00:32:44.5785787
+RoutesReceived    : 1
+MessagesSent      : 2341
+MessagesReceived  : 220
+```
 
